@@ -1,9 +1,152 @@
 @import "tailwindcss";
 
+/* ─── Design tokens ──────────────────────────────────────────────────────────
+   All colours, radii and shadows are authored here as CSS custom properties
+   ("tokens"). Components reference var(--token) rather than hard-coded hex so
+   that a single media-query or [data-theme] switch flips the whole palette.
+
+   Naming convention:
+     --color-bg-*        page / surface backgrounds
+     --color-text-*      text colours, from primary to muted
+     --color-border-*    borders and dividers
+     --color-accent-*    the brand violet family
+     --color-status-*    semantic: success / error / warning / info
+────────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* Backgrounds */
+  --color-bg-base:      #ffffff;   /* page background */
+  --color-bg-subtle:    #fafafa;   /* card / panel fill */
+  --color-bg-raised:    #f6f5f8;   /* button / chip / input fill */
+  --color-bg-overlay:   #f0eff3;   /* dividers, inner wells */
+
+  /* Text */
+  --color-text-primary:   #0e0e12;
+  --color-text-secondary: #6b6975;
+  --color-text-muted:     #a6a3b0;
+
+  /* Borders */
+  --color-border-default: #e5e3ea;
+  --color-border-strong:  #c4b5fd;  /* accent hover border */
+
+  /* Brand / Accent (violet) */
+  --color-accent-9:  #8b5cf6;   /* primary fill */
+  --color-accent-10: #7c3aed;   /* primary hover fill */
+  --color-accent-3:  #f5f3ff;   /* light tint background */
+  --color-accent-11: #7c3aed;   /* accent text */
+
+  /* Semantic status */
+  --color-success-bg:   #f0fdf4;
+  --color-success-text: #16a34a;
+  --color-error-bg:     #fef2f2;
+  --color-error-text:   #dc2626;
+  --color-error-dark:   #991b1b;
+  --color-warning-bg:   #fffbeb;
+  --color-warning-text: #b45309;
+  --color-error-border: #fed7aa;
+  --color-error-surface:#fffaf5;
+  --color-error-surface-text: #9a3412;
+
+  /* Misc */
+  --color-neutral-bg:   #f4f4f5;
+  --color-neutral-text: #6b6975;
+  --color-active-bg:    #f0fdf4;
+  --color-active-text:  #16a34a;
+
+  color-scheme: light;
+}
+
+/* ─── Dark palette ───────────────────────────────────────────────────────── */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-bg-base:      #0e0e12;
+    --color-bg-subtle:    #18181f;
+    --color-bg-raised:    #1e1d27;
+    --color-bg-overlay:   #262534;
+
+    --color-text-primary:   #f2f0fa;
+    --color-text-secondary: #9b98a8;
+    --color-text-muted:     #6b6975;
+
+    --color-border-default: #2e2c3d;
+    --color-border-strong:  #7c3aed;
+
+    --color-accent-9:  #8b5cf6;
+    --color-accent-10: #a78bfa;
+    --color-accent-3:  #1e1a2e;
+    --color-accent-11: #c4b5fd;
+
+    --color-success-bg:   #052e16;
+    --color-success-text: #4ade80;
+    --color-error-bg:     #2c0a0a;
+    --color-error-text:   #f87171;
+    --color-error-dark:   #fca5a5;
+    --color-warning-bg:   #1c1407;
+    --color-warning-text: #fbbf24;
+    --color-error-border: #7c2d12;
+    --color-error-surface:#1a1009;
+    --color-error-surface-text: #fdba74;
+
+    --color-neutral-bg:   #1e1d27;
+    --color-neutral-text: #9b98a8;
+    --color-active-bg:    #052e16;
+    --color-active-text:  #4ade80;
+
+    color-scheme: dark;
+  }
+}
+
+/* Manual dark override (user clicked the toggle → data-theme="dark") */
+:root[data-theme="dark"] {
+  --color-bg-base:      #0e0e12;
+  --color-bg-subtle:    #18181f;
+  --color-bg-raised:    #1e1d27;
+  --color-bg-overlay:   #262534;
+
+  --color-text-primary:   #f2f0fa;
+  --color-text-secondary: #9b98a8;
+  --color-text-muted:     #6b6975;
+
+  --color-border-default: #2e2c3d;
+  --color-border-strong:  #7c3aed;
+
+  --color-accent-9:  #8b5cf6;
+  --color-accent-10: #a78bfa;
+  --color-accent-3:  #1e1a2e;
+  --color-accent-11: #c4b5fd;
+
+  --color-success-bg:   #052e16;
+  --color-success-text: #4ade80;
+  --color-error-bg:     #2c0a0a;
+  --color-error-text:   #f87171;
+  --color-error-dark:   #fca5a5;
+  --color-warning-bg:   #1c1407;
+  --color-warning-text: #fbbf24;
+  --color-error-border: #7c2d12;
+  --color-error-surface:#1a1009;
+  --color-error-surface-text: #fdba74;
+
+  --color-neutral-bg:   #1e1d27;
+  --color-neutral-text: #9b98a8;
+  --color-active-bg:    #052e16;
+  --color-active-text:  #4ade80;
+
+  color-scheme: dark;
+}
+
+/* Manual light override (user clicked toggle → data-theme="light") */
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+/* ─── Base styles ────────────────────────────────────────────────────────── */
+
 body {
-  background-color: #ffffff;
-  color: #0e0e12;
+  background-color: var(--color-bg-base);
+  color: var(--color-text-primary);
   font-family: var(--font-inter), system-ui, sans-serif;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .mono {
@@ -21,14 +164,16 @@ a {
 input:focus-visible,
 textarea:focus-visible,
 button:focus-visible {
-  outline: 2px solid #8b5cf6;
+  outline: 2px solid var(--color-accent-9);
   outline-offset: 2px;
 }
+
+/* ─── GraphQL editor ─────────────────────────────────────────────────────── */
 
 .graphql-editor .cm-editor {
   min-height: 280px;
   background: transparent;
-  color: #0e0e12;
+  color: var(--color-text-primary);
   font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
 }
 
@@ -38,20 +183,22 @@ button:focus-visible {
 }
 
 .graphql-editor .cm-gutters {
-  background: #fafafa;
-  border-right: 1px solid #e5e3ea;
-  color: #a6a3b0;
+  background: var(--color-bg-subtle);
+  border-right: 1px solid var(--color-border-default);
+  color: var(--color-text-muted);
 }
 
 .graphql-editor .cm-activeLine,
 .graphql-editor .cm-activeLineGutter {
-  background: #f8f6ff;
+  background: var(--color-accent-3);
 }
 
 input::placeholder,
 textarea::placeholder {
-  color: #a6a3b0;
+  color: var(--color-text-muted);
 }
+
+/* ─── Scrollbar ──────────────────────────────────────────────────────────── */
 
 ::-webkit-scrollbar {
   width: 10px;
@@ -59,6 +206,6 @@ textarea::placeholder {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #e5e3ea;
+  background: var(--color-border-default);
   border-radius: 8px;
 }

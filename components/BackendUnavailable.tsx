@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/Button";
 
 export default function BackendUnavailable({ onRetry }: { onRetry?: () => void }) {
   const router = useRouter();
@@ -15,14 +16,26 @@ export default function BackendUnavailable({ onRetry }: { onRetry?: () => void }
   }
 
   return (
-    <div role="alert" className="p-8 rounded-xl border border-[#fed7aa] bg-[#fffaf5] text-center">
-      <p className="text-[#9a3412] font-semibold mb-2">Lumina data is temporarily unavailable</p>
-      <p className="text-[#6b6975] text-sm max-w-lg mx-auto mb-4">
-        We couldn’t reach the indexer. Check your connection or try again in a moment; your request has not been lost.
+    <div
+      role="alert"
+      className="p-8 rounded-xl border border-[var(--color-error-border)] bg-[var(--color-error-surface)] text-center"
+    >
+      <p className="text-[var(--color-error-surface-text)] font-semibold mb-2">
+        Lumina data is temporarily unavailable
       </p>
-      <button type="button" onClick={retry} disabled={retrying} className="bg-[#0e0e12] hover:bg-[#28262f] disabled:opacity-50 text-white font-semibold text-sm px-4 py-2 rounded-lg">
-        {retrying ? "Retrying…" : "Retry"}
-      </button>
+      <p className="text-[var(--color-text-secondary)] text-sm max-w-lg mx-auto mb-4">
+        We couldn&apos;t reach the indexer. Check your connection or try again in a
+        moment; your request has not been lost.
+      </p>
+      <Button
+        variant="secondary"
+        size="sm"
+        loading={retrying}
+        loadingText="Retrying…"
+        onClick={retry}
+      >
+        Retry
+      </Button>
     </div>
   );
 }

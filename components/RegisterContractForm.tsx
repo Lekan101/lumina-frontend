@@ -13,6 +13,7 @@ import { nativeToScVal } from '@stellar/stellar-sdk';
 import { REGISTRY_CATEGORIES, type RegistryCategory } from '@/lib/categories';
 import { NETWORK_PASSPHRASE, REGISTRY_CONTRACT_ID, SOROBAN_RPC_URL } from '@/lib/registry';
 import { createStellarDriver, submitContractCall, type TxPhase } from '@/lib/sorobanTx';
+import { Button } from '@/components/ui/Button';
 
 
 export interface RegistrationInput {
@@ -173,7 +174,7 @@ export default function RegisterContractForm({
     <form onSubmit={handleSubmit} className="flex flex-col gap-3.5">
 
       <div>
-        <label htmlFor="reg-contract-id" className="block text-xs font-semibold text-[#6b6975] mb-1.5">
+        <label htmlFor="reg-contract-id" className="block text-xs font-semibold text-[var(--color-text-secondary)] mb-1.5">
           Contract ID
         </label>
         <input
@@ -181,13 +182,13 @@ export default function RegisterContractForm({
           value={contractId}
           onChange={e => setContractId(e.target.value)}
           placeholder="CABC...EXAMPLE"
-          className="w-full min-h-[42px] px-3 py-2 text-[13px] mono bg-white border border-[#e5e3ea] rounded-lg"
+          className="w-full min-h-[42px] px-3 py-2 text-[13px] mono bg-[var(--color-bg-base)] border border-[var(--color-border-default)] rounded-lg text-[var(--color-text-primary)]"
           required
         />
       </div>
 
       <div>
-        <label htmlFor="reg-name" className="block text-xs font-semibold text-[#6b6975] mb-1.5">
+        <label htmlFor="reg-name" className="block text-xs font-semibold text-[var(--color-text-secondary)] mb-1.5">
           Project Name
         </label>
         <input
@@ -195,13 +196,13 @@ export default function RegisterContractForm({
           value={name}
           onChange={e => setName(e.target.value)}
           placeholder="My Protocol"
-          className="w-full min-h-[42px] px-3 py-2 text-sm bg-white border border-[#e5e3ea] rounded-lg"
+          className="w-full min-h-[42px] px-3 py-2 text-sm bg-[var(--color-bg-base)] border border-[var(--color-border-default)] rounded-lg text-[var(--color-text-primary)]"
           required
         />
       </div>
 
       <div>
-        <label htmlFor="reg-description" className="block text-xs font-semibold text-[#6b6975] mb-1.5">
+        <label htmlFor="reg-description" className="block text-xs font-semibold text-[var(--color-text-secondary)] mb-1.5">
           Description
         </label>
         <textarea
@@ -210,13 +211,13 @@ export default function RegisterContractForm({
           onChange={e => setDescription(e.target.value)}
           rows={3}
           placeholder="A DeFi protocol on Stellar"
-          className="w-full px-3 py-2 text-sm bg-white border border-[#e5e3ea] rounded-lg resize-y"
+          className="w-full px-3 py-2 text-sm bg-[var(--color-bg-base)] border border-[var(--color-border-default)] rounded-lg resize-y text-[var(--color-text-primary)]"
         />
       </div>
 
       <fieldset>
-        <legend className="block text-xs font-semibold text-[#6b6975] mb-1.5">
-          Categories <span className="text-[#a6a3b0] font-normal">(pick at least one)</span>
+        <legend className="block text-xs font-semibold text-[var(--color-text-secondary)] mb-1.5">
+          Categories <span className="text-[var(--color-text-muted)] font-normal">(pick at least one)</span>
         </legend>
         <div className="flex flex-wrap gap-1.5">
           {REGISTRY_CATEGORIES.map(category => {
@@ -229,8 +230,8 @@ export default function RegisterContractForm({
                 onClick={() => toggleCategory(category)}
                 className={`text-xs font-semibold px-2.5 py-1.5 rounded-full border transition-colors ${
                   selected
-                    ? 'bg-[#f5f3ff] text-[#7c3aed] border-[#c4b5fd]'
-                    : 'bg-white text-[#6b6975] border-[#e5e3ea] hover:border-[#c4b5fd]'
+                    ? 'bg-[var(--color-accent-3)] text-[var(--color-accent-11)] border-[var(--color-border-strong)]'
+                    : 'bg-[var(--color-bg-base)] text-[var(--color-text-secondary)] border-[var(--color-border-default)] hover:border-[var(--color-border-strong)]'
                 }`}
               >
                 {category}
@@ -239,27 +240,30 @@ export default function RegisterContractForm({
           })}
         </div>
         {categoryError && (
-          <p role="alert" className="text-xs text-[#dc2626] mt-1.5">
+          <p role="alert" className="text-xs text-[var(--color-error-text)] mt-1.5">
             {categoryError}
           </p>
         )}
       </fieldset>
 
-      <button
+      <Button
         type="submit"
-        disabled={busy}
-        className="bg-[#8b5cf6] hover:bg-[#7c3aed] disabled:opacity-50 text-white font-bold text-sm py-3 rounded-lg mt-1 transition-colors"
+        variant="primary"
+        size="md"
+        loading={busy}
+        loadingText={SUBMIT_LABELS[phase]}
+        className="mt-1 w-full"
       >
         {SUBMIT_LABELS[phase]}
-      </button>
+      </Button>
 
       {phase === 'success' && (
-        <div role="status" className="text-xs text-[#16a34a] bg-[#f0fdf4] rounded-lg px-3 py-2.5">
+        <div role="status" className="text-xs text-[var(--color-success-text)] bg-[var(--color-success-bg)] rounded-lg px-3 py-2.5">
           {message}
         </div>
       )}
       {phase === 'error' && (
-        <div role="alert" className="text-xs text-[#dc2626] bg-[#fef2f2] rounded-lg px-3 py-2.5">
+        <div role="alert" className="text-xs text-[var(--color-error-text)] bg-[var(--color-error-bg)] rounded-lg px-3 py-2.5">
           {message}
         </div>
       )}

@@ -23,6 +23,7 @@ import OwnerContracts from "@/components/OwnerContracts";
 import RegistryEntryCard from "@/components/RegistryEntryCard";
 import BackendUnavailable from "@/components/BackendUnavailable";
 import WalletInfo from "@/components/WalletInfo";
+import { Button } from "@/components/ui/Button";
 
 type Tab = "mine" | "all";
 
@@ -183,47 +184,47 @@ function RegistryContent() {
 
   return (
     <div className="max-w-[1160px] mx-auto px-4 sm:px-7 py-12">
-      <h1 className="font-extrabold text-3xl mb-2 text-[#0e0e12]">
+      <h1 className="font-extrabold text-3xl mb-2 text-[var(--color-text-primary)]">
         Lumina Registry
       </h1>
-      <p className="text-[#6b6975] mb-8 max-w-[70ch]">
+      <p className="text-[var(--color-text-secondary)] mb-8 max-w-[70ch]">
         An on-chain Soroban manifest of contracts Lumina indexes. Register your
         contract to opt into priority indexing — permissionless, on
         Stellar/Soroban testnet.
       </p>
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-8 items-start">
-        <div className="border border-[#e5e3ea] rounded-2xl p-6 bg-[#fafafa]">
-          <h2 className="font-extrabold text-base mb-[18px] text-[#0e0e12]">
+        <div className="border border-[var(--color-border-default)] rounded-2xl p-6 bg-[var(--color-bg-subtle)]">
+          <h2 className="font-extrabold text-base mb-[18px] text-[var(--color-text-primary)]">
             Register a Contract
           </h2>
 
-          {/* walletResolving means we have a persisted session but haven't confirmed
-              it yet — show a neutral "Connecting…" state rather than flashing
-              the disconnected UI on every reload (#86). */}
           {walletResolving ? (
-            <p className="text-[13px] text-[#a6a3b0]">Connecting…</p>
+            <p className="text-[13px] text-[var(--color-text-muted)]">Connecting…</p>
           ) : !walletAddress ? (
             <div className="flex flex-col gap-3">
-              <p className="text-[13px] text-[#6b6975]">
+              <p className="text-[13px] text-[var(--color-text-secondary)]">
                 Connect a wallet to register and manage contracts.
               </p>
-              <button
+              <Button
+                variant="primary"
+                size="md"
+                loading={connecting}
+                loadingText="Connecting…"
                 onClick={handleConnect}
-                disabled={connecting}
-                className="bg-[#8b5cf6] hover:bg-[#7c3aed] disabled:opacity-50 text-white font-bold text-sm py-3 rounded-lg transition-colors"
+                className="w-full"
               >
-                {connecting ? "Connecting…" : "Connect Wallet"}
-              </button>
+                Connect Wallet
+              </Button>
               {connectError && (
                 <div
                   role="alert"
-                  className="text-xs text-[#dc2626] bg-[#fef2f2] rounded-lg px-3 py-2"
+                  className="text-xs text-[var(--color-error-text)] bg-[var(--color-error-bg)] rounded-lg px-3 py-2"
                 >
                   {walletLocked ? (
                     <div>
                       <p className="font-semibold mb-1">Your wallet is locked</p>
-                      <p className="text-[#991b1b]">Unlock your wallet extension and try again.</p>
+                      <p className="text-[var(--color-error-dark)]">Unlock your wallet extension and try again.</p>
                     </div>
                   ) : (
                     connectError
@@ -233,7 +234,6 @@ function RegistryContent() {
             </div>
           ) : (
             <div className="flex flex-col gap-3">
-              {/* Wallet name + icon + disconnect control (#87, #88) */}
               <WalletInfo
                 address={wallet!.address}
                 walletName={wallet!.walletName}
@@ -341,8 +341,8 @@ function TabButton({
       onClick={onClick}
       className={`text-sm font-extrabold px-3 py-1.5 rounded-lg transition-colors disabled:opacity-40 ${
         active
-          ? "bg-[#f5f3ff] text-[#7c3aed]"
-          : "text-[#6b6975] hover:text-[#0e0e12]"
+          ? "bg-[var(--color-accent-3)] text-[var(--color-accent-11)]"
+          : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
       }`}
     >
       {children}
@@ -365,8 +365,8 @@ function CategoryChip({
       onClick={onClick}
       className={`text-xs font-bold px-2.5 py-1 rounded-full border transition-colors ${
         active
-          ? "bg-[#f5f3ff] border-[#8b5cf6] text-[#7c3aed]"
-          : "border-[#e5e3ea] text-[#6b6975] hover:text-[#0e0e12]"
+          ? "bg-[var(--color-accent-3)] border-[var(--color-accent-9)] text-[var(--color-accent-11)]"
+          : "border-[var(--color-border-default)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
       }`}
     >
       {children}
