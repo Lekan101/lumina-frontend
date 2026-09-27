@@ -1,13 +1,31 @@
 'use client';
 
+import { Suspense } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NAV_ROUTES } from "@/lib/routes";
 import ThemeToggle from "@/components/ThemeToggle";
 
-export default function Navbar() {
-  const pathname = usePathname();
-
+/**
+ * The nav for one network: the wordmark, the section links, and optionally the
+ * switcher between them.
+ *
+ * Every link carries the network it was rendered on, which is what makes the
+ * selection survive navigation: a link someone shared while looking at testnet
+ * keeps showing testnet pages as the reader moves around the app, instead of
+ * quietly reverting to the default the moment they click anything. On the
+ * default network `withNetwork` writes nothing, so the hrefs here are the ones
+ * the app has always emitted.
+ */
+function NavContent({
+  network,
+  pathname,
+  switcher,
+}: {
+  network: NetworkId;
+  pathname: string;
+  switcher?: React.ReactNode;
+}) {
   return (
     <nav className="flex items-center gap-1 px-4 sm:px-7 h-[60px] border-b border-[var(--color-border-default)] bg-[var(--color-bg-base)]/90 backdrop-blur sticky top-0 z-20 overflow-x-auto">
       <Link href="/" className="flex items-center gap-2 mr-4 sm:mr-7 shrink-0">
@@ -18,6 +36,8 @@ export default function Navbar() {
         <span className="font-extrabold text-[17px] tracking-tight text-[var(--color-text-primary)]">Lumina</span>
       </Link>
 
+      {switcher}
+
       {/* Labels come from the route inventory, which the sitemap is built from,
           so the nav and the sitemap cannot disagree about what exists. */}
       {NAV_ROUTES.map(route => {
@@ -25,7 +45,7 @@ export default function Navbar() {
         return (
           <Link
             key={route.path}
-            href={route.path}
+            href={withNetwork(route.path, network)}
             className={`px-3.5 py-2 text-[13.5px] font-semibold rounded-lg whitespace-nowrap transition-colors ${
               active
                 ? "text-[var(--color-text-primary)] bg-[var(--color-bg-raised)]"

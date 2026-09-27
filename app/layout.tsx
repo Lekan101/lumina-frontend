@@ -55,11 +55,14 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col bg-[var(--color-bg-base)] text-[var(--color-text-primary)]">
         <SkipLink />
+        {/* Alerts for watched addresses have to keep arriving on every route,
+            which is the whole point of a watch. It subscribes and records; it
+            renders nothing. */}
+        <WatchActivityWatcher />
         <Navbar />
         <KeyboardShortcuts />
         <main id="main" className="flex-1">{children}</main>
         <Footer />
-        <KeyboardShortcuts />
       </body>
     </html>
   );
